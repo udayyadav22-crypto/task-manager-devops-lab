@@ -1,0 +1,35 @@
+name: DevOps Foundation CI
+
+on:
+  push:
+    branches:
+      - main
+      - "feature/**"
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  repository-check:
+    name: Validate DevOps Configuration
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Verify configuration files
+        run: |
+          test -f .gitignore
+          test -f .github/workflows/ci.yml
+          echo "Required DevOps configuration files exist."
+
+      - name: Check repository metadata
+        run: |
+          echo "Repository: $GITHUB_REPOSITORY"
+          echo "Branch or ref: $GITHUB_REF"
+          echo "Commit: $GITHUB_SHA"
